@@ -1,0 +1,74 @@
+﻿@model ContactsMVC.Models.DTO.ContactCreateDTO
+
+<form asp-action="CreateContact">
+    <br />
+    <div class="container border p-3">
+        <h1 class="text-primary">Create Contact</h1>
+        <hr />
+
+        <div class="row">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="col-2">
+                <label asp-for="Name" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="col-2">
+                <label asp-for="Email" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="col-2">
+                <label asp-for="PhoneNumber" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="PhoneNumber" class="form-control" type="tel" placeholder="Enter your phone number" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+
+            <div class="col-2">
+                <label asp-for="DateOfBirth" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="DateOfBirth" class="form-control" type="date" placeholder="Select your birth date" />
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            </div>
+            <div class="col-2">
+                <label asp-for="Password" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Password" class="form-control" type="password" placeholder="Enter your password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="col-2">
+                <label asp-for="ContactType" class="control-label pt-2" style="font-size:20px;"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <select asp-for="ContactType" class="form-control" id="contactTypeSelect">
+                    <option value="Personal">Personal</option>
+                    <option value="Buisness">Buisness</option>
+                    <option value="Other">Other</option>
+                </select>
+                <span asp-validation-for="ContactType" class="text-danger"></span>
+            </div>
+            <div class="col-5 offset-2">
+                <a asp-action="IndexContact" asp-controller="Contact" class="btn-primary btn form-control ">Back to List</a>
+            </div>
+            <div class="col-5">
+                <input type="submit" value="Create" class="btn btn-success form-control" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

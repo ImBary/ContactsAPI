@@ -1,0 +1,45 @@
+﻿@model IEnumerable<ContactsMVC.Models.DTO.ContactDTO>
+<br />
+<div class="container p-4 border">
+	<div class="row pb-2">
+		<div class="col">
+			<h1 class="text-primary">Contact List</h1>
+		</div>
+		<div class="col text-end pt-1">
+			<a asp-controller="Contact" asp-action="CreateContact" class="btn btn-outline-primary"><i class="bi bi-plus-square-fill"></i> Create New Contact</a>
+		</div>
+	</div>
+
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					Name
+				</th>
+				<th>
+					PhoneNumber
+				</th>
+				<th>
+					Email
+				</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>@item.Name</td>
+					<td>@item.PhoneNumber</td>
+					<td>@item.Email</td>
+					<td>
+						<a asp-controller="Contact" asp-action="UpdateContact" asp-route-id="@item.Id" class="btn btn-success"><i class="bi bi-pencil-square"></i></a>
+						<a asp-controller="Contact" asp-action="DeleteContact" asp-route-id="@item.Id" class="btn btn-danger"><i class="bi bi-trash-fill"></i></a>
+						<a asp-controller="Contact" asp-action="ShowContact" asp-route-id="@item.Id" class="btn btn-info"><i class="bi bi-box-arrow-in-left"></i></a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+</div>
