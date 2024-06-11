@@ -1,8 +1,10 @@
 using ContactsAPI;
 using ContactsAPI.Data;
+using ContactsAPI.Models;
 using ContactsAPI.Repository;
 using ContactsAPI.Repository.IRepository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -21,10 +23,13 @@ builder.Services.AddAutoMapper(typeof(MappingConfig));// Auto Mapper
 
 builder.Services.AddScoped<IUserRepository, UserRepository>(); //user
 
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+
 builder.Services.AddControllers(option =>//idk
 {
 
 }).AddNewtonsoftJson();
+
 
 var Key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
 

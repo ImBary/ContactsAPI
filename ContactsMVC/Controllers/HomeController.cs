@@ -1,4 +1,5 @@
 using AutoMapper;
+using Contacts_Utility;
 using ContactsMVC.Models;
 using ContactsMVC.Models.DTO;
 using ContactsMVC.Services.IServices;
@@ -21,7 +22,7 @@ namespace ContactsMVC.Controllers
         public async Task<IActionResult> Index()
 		{
             List<ContactDTO> list = new();
-            var response = await _contactService.GetAllAsync<ApiResponse>();
+            var response = await _contactService.GetAllAsync<ApiResponse>(HttpContext.Session.GetString(SD.SesstionToken));
             if (response != null && response.IsSuccess)
             {
                 list = JsonConvert.DeserializeObject<List<ContactDTO>>(Convert.ToString(response.Result));

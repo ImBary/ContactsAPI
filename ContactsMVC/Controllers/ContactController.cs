@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Contacts_Utility;
 using ContactsMVC.Models;
 using ContactsMVC.Models.DTO;
 using ContactsMVC.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -17,11 +19,11 @@ namespace ContactsMVC.Controllers
             _contactService = contactService;
 			_mapper = mapper;
         }
-
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> IndexContact()
 		{
 			List<ContactDTO> list = new();
-			var response = await _contactService.GetAllAsync<ApiResponse>();
+			var response = await _contactService.GetAllAsync<ApiResponse>(HttpContext.Session.GetString(SD.SesstionToken));
 			if(response != null && response.IsSuccess)
 			{
 				list = JsonConvert.DeserializeObject<List<ContactDTO>>(Convert.ToString(response.Result));
@@ -32,7 +34,7 @@ namespace ContactsMVC.Controllers
 
 		public async Task<IActionResult> ShowContact(int id)
 		{
-			var response = await _contactService.GetAsync<ApiResponse>(id);
+			var response = await _contactService.GetAsync<ApiResponse>(id, HttpContext.Session.GetString(SD.SesstionToken));
 			if (response != null && response.IsSuccess)
 			{
 				ContactDTO model = JsonConvert.DeserializeObject<ContactDTO>(Convert.ToString(response.Result));
@@ -46,11 +48,12 @@ namespace ContactsMVC.Controllers
 		}
 		[HttpPost]
 		[ValidateAntiForgeryToken]
+		[Authorize(Roles ="admin")]
 		public async Task<IActionResult> CreateContact(ContactCreateDTO model)
 		{
 			if (ModelState.IsValid)
 			{
-				var response = await _contactService.CreateAsync<ApiResponse>(model);
+				var response = await _contactService.CreateAsync<ApiResponse>(model, HttpContext.Session.GetString(SD.SesstionToken));
 				if (response != null && response.IsSuccess)
 				{
 					return RedirectToAction(nameof(IndexContact));
@@ -61,7 +64,7 @@ namespace ContactsMVC.Controllers
 
 		public async Task<IActionResult> UpdateContact(int id)
 		{
-            var response = await _contactService.GetAsync<ApiResponse>(id);
+            var response = await _contactService.GetAsync<ApiResponse>(id, HttpContext.Session.GetString(SD.SesstionToken));
             if (response != null && response.IsSuccess)
             {
                 ContactDTO model = JsonConvert.DeserializeObject<ContactDTO>(Convert.ToString(response.Result));
@@ -73,11 +76,12 @@ namespace ContactsMVC.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateContact(ContactUpdateDTO model)
         {
             if (ModelState.IsValid)
             {
-                var response = await _contactService.UpdateAsync<ApiResponse>(model);
+                var response = await _contactService.UpdateAsync<ApiResponse>(model, HttpContext.Session.GetString(SD.SesstionToken));
                 if (response != null && response.IsSuccess)
                 {
                     return RedirectToAction(nameof(IndexContact));
@@ -88,7 +92,7 @@ namespace ContactsMVC.Controllers
 
         public async Task<IActionResult> DeleteContact(int id)
         {
-            var response = await _contactService.GetAsync<ApiResponse>(id);
+            var response = await _contactService.GetAsync<ApiResponse>(id, HttpContext.Session.GetString(SD.SesstionToken));
             if (response != null && response.IsSuccess)
 			{
 				ContactDTO model = JsonConvert.DeserializeObject<ContactDTO>(Convert.ToString(response.Result));
@@ -99,10 +103,11 @@ namespace ContactsMVC.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> DeleteContact(ContactDTO model)
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> DeleteContact(ContactDTO model)
 		{
 
-			var response = await _contactService.DeleteAsync<ApiResponse>(model.Id);
+			var response = await _contactService.DeleteAsync<ApiResponse>(model.Id, HttpContext.Session.GetString(SD.SesstionToken));
 			if (response != null && response.IsSuccess)
 			{
 				return RedirectToAction(nameof(IndexContact));

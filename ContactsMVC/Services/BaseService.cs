@@ -3,6 +3,7 @@ using ContactsMVC.Models;
 using ContactsMVC.Services.IServices;
 using Newtonsoft.Json;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace ContactsMVC.Services
@@ -50,7 +51,13 @@ namespace ContactsMVC.Services
 				}
 
 				HttpResponseMessage apiResponse = null;
-				apiResponse = await client.SendAsync(message); //czekamy na odpowiedz 
+                if (!string.IsNullOrEmpty(apiRequest.Token))
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiRequest.Token);
+                }
+                apiResponse = await client.SendAsync(message); //czekamy na odpowiedz 
+
+				
 
 				var apiContent = await apiResponse.Content.ReadAsStringAsync();//zwracamy odpowiedz
 				var ApiResponse = JsonConvert.DeserializeObject<T>(apiContent);

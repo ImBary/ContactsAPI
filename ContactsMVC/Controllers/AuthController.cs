@@ -3,8 +3,10 @@ using ContactsMVC.Models;
 using ContactsMVC.Models.DTO;
 using ContactsMVC.Services.IServices;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Security.Claims;
 
 namespace ContactsMVC.Controllers
 {
@@ -32,7 +34,15 @@ namespace ContactsMVC.Controllers
 			if(res!=null && res.IsSuccess)
 			{
 				LoginResponseDTO model = JsonConvert.DeserializeObject<LoginResponseDTO>(Convert.ToString(res.Result));
-				HttpContext.Session.SetString(SD.SesstionToken, model.Token);
+
+				//setting calims so server would know if user is login
+				var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+				identity.AddClaim(new Claim(ClaimTypes.Name, model.User.UserName));
+                identity.AddClaim(new Claim(ClaimTypes.Role, model.User.Role));
+				var principal = new ClaimsPrincipal(identity);
+				await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,principal);
+
+                HttpContext.Session.SetString(SD.SesstionToken, model.Token);//setting session
 				return RedirectToAction("Index", "Home");
 			}
 			else
@@ -40,7 +50,7 @@ namespace ContactsMVC.Controllers
 				ModelState.AddModelError("CustomError",res.ErrorMessages.FirstOrDefault());
 				return View(obj);
 			}
-			return View(obj);
+			
 		}
 
 		[HttpGet]
