@@ -13,6 +13,7 @@ namespace ContactsAPI
 			CreateMap<Contact, ContactUpdateDTO>().ReverseMap();
 
 			CreateMap<ContactDTO,Contact>();
+			CreateMap<ApplicationUser, UserDTO>().ReverseMap();
 		}
     }
 }

@@ -34,7 +34,7 @@ namespace ContactsMVC.Services
 				ApiType = SD.ApiType.POST,
 				Data = registerRequest,
 				Url = contactUrl + "/api/UsersAuth/register"
-			});
+            });
 		}
 	}
 }

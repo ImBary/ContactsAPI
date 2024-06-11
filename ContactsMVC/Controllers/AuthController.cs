@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace ContactsMVC.Controllers
@@ -35,10 +36,13 @@ namespace ContactsMVC.Controllers
 			{
 				LoginResponseDTO model = JsonConvert.DeserializeObject<LoginResponseDTO>(Convert.ToString(res.Result));
 
+				var handler = new JwtSecurityTokenHandler();
+				var jwt = handler.ReadJwtToken(model.Token);
+
 				//setting calims so server would know if user is login
 				var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
 				identity.AddClaim(new Claim(ClaimTypes.Name, model.User.UserName));
-                identity.AddClaim(new Claim(ClaimTypes.Role, model.User.Role));
+                identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(u=>u.Type=="role").Value));
 				var principal = new ClaimsPrincipal(identity);
 				await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,principal);
 
@@ -69,7 +73,14 @@ namespace ContactsMVC.Controllers
 			{
 				return RedirectToAction("Login");
 			}
-			return View(obj);
+            if (res != null && res.ErrorMessages != null && res.ErrorMessages.Any())
+            {
+                foreach (var error in res.ErrorMessages)
+                {
+                    ModelState.AddModelError(string.Empty, error);
+                }
+            }
+            return View(obj);
 		}
 
 

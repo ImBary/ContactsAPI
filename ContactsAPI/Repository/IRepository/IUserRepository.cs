@@ -7,6 +7,6 @@ namespace ContactsAPI.Repository.IRepository
 	{
 		public bool IsUnique(string username);
 		public Task<LoginResponseDTO> Login(LoginRequestDTO loginRequestDTO);
-		public Task<LocalUser> Register(RegisterRequestDTO registerRequestDTO);
+		public Task<UserDTO> Register(RegisterRequestDTO registerRequestDTO);
 	}
 }

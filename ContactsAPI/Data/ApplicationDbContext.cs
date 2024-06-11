@@ -12,22 +12,12 @@ namespace ContactsAPI.Data
 
         }
 		public DbSet<ApplicationUser> ApplicationUsers { get; set; }
-		public DbSet<LocalUser> LocalUsers { get; set; }
+		
 		public DbSet<Contact> Contacts { get; set; }
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<LocalUser>().HasData(
-                new LocalUser
-                {
-                    Id = 1,
-                    UserName = "admin",
-                    Name = "admin",
-                    Passsword = "Admin1",
-                    Role = "admin",
-                });
-
-
+            
             modelBuilder.Entity<Contact>().HasData(
 				new Contact
 				{

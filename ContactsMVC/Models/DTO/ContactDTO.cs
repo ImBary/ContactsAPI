@@ -19,6 +19,7 @@ namespace ContactsMVC.Models.DTO
 
 		[Required]
 		[StringLength(100)]
+		[MinLength(5)]
 		public string Password { get; set; }
 
 		[Required]
