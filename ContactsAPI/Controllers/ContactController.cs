@@ -51,7 +51,7 @@ namespace ContactsAPI.Controllers
 		}
 
 		[HttpGet("{id:int}", Name = "GetContact")]
-		//[Authorize]
+		//[Authorize(Roles ="admin")]
 		[ProducesResponseType(200)]
 		[ProducesResponseType(404)]
 		[ProducesResponseType(400)]
@@ -94,7 +94,6 @@ namespace ContactsAPI.Controllers
 		[HttpPost]
 		[ProducesResponseType(201)]
 		[ProducesResponseType(404)]
-		[ProducesResponseType(400)]
 		//[Authorize(Roles = "admin")]
 		public async Task<ActionResult<ApiResponse>> CreateContact([FromBody] ContactCreateDTO contactCreateDto)
 		{
@@ -138,6 +137,7 @@ namespace ContactsAPI.Controllers
 		[ProducesResponseType(204)]
 		[ProducesResponseType(404)]
 		[ProducesResponseType(400)]
+		//[Authorize(Roles = "admin")]
 		public async Task<ActionResult<ApiResponse>> DeleteContact(int id)
 		{
 			try
@@ -179,6 +179,7 @@ namespace ContactsAPI.Controllers
 		[ProducesResponseType(204)]
 		[ProducesResponseType(404)]
 		[ProducesResponseType(400)]
+		//[Authorize(Roles = "admin")]
 		public async Task<ActionResult<ApiResponse>> UpdateContact(int id, [FromBody] ContactUpdateDTO upadteDTO)
 		{
 			try

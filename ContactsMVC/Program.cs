@@ -9,10 +9,24 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddAutoMapper(typeof(MappingConfig)); //auto maper
 
-builder.Services.AddHttpClient<IContactService, ContactService>(); // http client
+builder.Services.AddHttpClient<IContactService, ContactService>(); // http contact
 
 builder.Services.AddScoped<IContactService, ContactService>(); // Service
 
+
+builder.Services.AddHttpClient<IAuthService, AuthService>(); // http user
+
+builder.Services.AddScoped<IAuthService, AuthService>(); // service
+
+builder.Services.AddDistributedMemoryCache();//cache dla servera
+
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>(); // accesor do sesji _layout
+builder.Services.AddSession(options =>
+{
+	options.IdleTimeout = TimeSpan.FromMinutes(10);
+	options.Cookie.HttpOnly = true;
+	options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
@@ -29,7 +43,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthorization();
+app.UseAuthorization();//dodanie autoryzacji
+
+app.UseSession();//dodanie sesji
 
 app.MapControllerRoute(
 	name: "default",

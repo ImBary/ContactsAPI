@@ -15,5 +15,6 @@
 			PUT,
 			DELETE
 		}
+		public static string SesstionToken = "JWTToken";
 	}
 }
